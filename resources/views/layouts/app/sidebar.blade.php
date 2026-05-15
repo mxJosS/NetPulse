@@ -20,15 +20,15 @@
                     {{ __('Dashboard') }}
                 </flux:sidebar.item>
 
-                <flux:sidebar.item icon="users" href="#">
+                <flux:sidebar.item icon="users" :href="route('clients.index')" :current="request()->routeIs('clients.*')">
                     Clientes
                 </flux:sidebar.item>
 
-                <flux:sidebar.item icon="server-stack" href="#">
+                <flux:sidebar.item icon="server-stack" :href="route('devices.index')" :current="request()->routeIs('devices.*')">
                     Equipos de Red
                 </flux:sidebar.item>
 
-                <flux:sidebar.item icon="clipboard-document-check" href="#">
+                <flux:sidebar.item icon="clipboard-document-check" :href="route('work-orders.index')" :current="request()->routeIs('work-orders.*')">
                     Órdenes de Trabajo
                 </flux:sidebar.item>
             </flux:sidebar.group>

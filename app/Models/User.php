@@ -1,46 +1,32 @@
 <?php
-
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Str;
-use Laravel\Fortify\TwoFactorAuthenticatable;
 
-#[Fillable(['name', 'email', 'password'])]
-#[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, TwoFactorAuthenticatable;
+    use HasFactory, Notifiable;
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+    protected $fillable = ['name', 'email', 'password', 'role'];
+
+    protected $hidden = ['password', 'remember_token'];
+
+    protected function casts(): array {
+        return ['email_verified_at' => 'datetime', 'password' => 'hashed'];
     }
 
-    /**
-     * Get the user's initials
-     */
+    public function isAdmin(): bool { return $this->role === 'admin'; }
+    public function isEngineer(): bool { return $this->role === 'engineer'; }
+    public function workOrders() { return $this->hasMany(WorkOrder::class); }
+
     public function initials(): string
     {
-        return Str::of($this->name)
-            ->explode(' ')
+        return collect(explode(' ', $this->name))
+            ->map(fn ($name) => mb_substr($name, 0, 1))
+            ->map(fn ($name) => mb_strtoupper($name))
             ->take(2)
-            ->map(fn ($word) => Str::substr($word, 0, 1))
-            ->implode('');
+            ->join('');
     }
 }

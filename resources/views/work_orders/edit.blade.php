@@ -16,8 +16,16 @@
                 </flux:select>
 
                 @if(!auth()->user()->isEngineer())
-                    <flux:input label="Título" name="title" value="{{ $workOrder->title }}" />
-                    <flux:textarea label="Descripción" name="description">{{ $workOrder->description }}</flux:textarea>
+                    <flux:input label="Título" name="title" value="{{ $workOrder->title }}" required />
+                    <flux:textarea label="Descripción" name="description" required>{{ $workOrder->description }}</flux:textarea>
+                    
+                    <flux:select label="Asignar Ingeniero" name="user_id" required>
+                        @foreach($engineers as $engineer)
+                            <option value="{{ $engineer->id }}" {{ $workOrder->user_id == $engineer->id ? 'selected' : '' }}>
+                                {{ $engineer->name }}
+                            </option>
+                        @endforeach
+                    </flux:select>
                 @endif
 
                 <div class="flex gap-2">

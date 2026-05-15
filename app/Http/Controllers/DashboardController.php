@@ -27,6 +27,7 @@ class DashboardController extends Controller
                 'pending_orders_count' => WorkOrder::where('user_id', $user->id)->where('status', 'pending')->count(),
                 'completed_orders_count' => WorkOrder::where('user_id', $user->id)->where('status', 'completed')->count(),
                 'total_orders_count' => WorkOrder::where('user_id', $user->id)->count(),
+                'active_orders' => WorkOrder::where('user_id', $user->id)->whereIn('status', ['pending', 'on_site'])->with('client', 'device')->latest()->get(),
             ];
         }
 

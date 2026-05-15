@@ -21,6 +21,10 @@
                 </flux:sidebar.item>
 
                 @if(auth()->user()->isAdmin())
+                    <flux:sidebar.item icon="user-group" :href="route('staff.index')" :current="request()->routeIs('staff.*')">
+                        Personal
+                    </flux:sidebar.item>
+
                     <flux:sidebar.item icon="users" :href="route('clients.index')" :current="request()->routeIs('clients.*')">
                         Clientes
                     </flux:sidebar.item>

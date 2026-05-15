@@ -11,9 +11,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('work-orders', [App\Http\Controllers\WorkOrderController::class, 'index'])->name('work-orders.index');
     Route::get('work-orders/{work_order}', [App\Http\Controllers\WorkOrderController::class, 'show'])->name('work-orders.show');
     Route::put('work-orders/{work_order}/status', [App\Http\Controllers\WorkOrderController::class, 'updateStatus'])->name('work-orders.update-status');
+    Route::post('work-orders/{work_order}/report', [App\Http\Controllers\WorkOrderController::class, 'generateReport'])->name('work-orders.report');
 
     // Admin only routes
     Route::middleware('role:admin')->group(function () {
+        Route::resource('staff', App\Http\Controllers\StaffController::class)->parameters(['staff' => 'staff']);
         Route::resource('clients', App\Http\Controllers\ClientController::class);
         Route::resource('devices', App\Http\Controllers\DeviceController::class);
         Route::resource('work-orders', App\Http\Controllers\WorkOrderController::class)->except(['index', 'show']);

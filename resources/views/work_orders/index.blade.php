@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between">
             <flux:heading size="xl" level="1">Órdenes de Trabajo</flux:heading>
             @if(auth()->user()->isAdmin())
-                <flux:button icon="plus" variant="primary" href="#">Nueva Orden</flux:button>
+                <flux:button icon="plus" variant="primary" href="{{ route('work-orders.create') }}">Nueva Orden</flux:button>
             @endif
         </div>
 
@@ -46,11 +46,19 @@
                                     </flux:badge>
                                 </td>
                                 <td class="px-4 py-3">
-                                    @if(auth()->user()->isAdmin())
-                                        <flux:button size="sm" icon="pencil-square" href="{{ route('work-orders.edit', $order) }}" variant="ghost" />
-                                    @else
-                                        <flux:button size="sm" icon="eye" href="{{ route('work-orders.show', $order) }}" variant="ghost">Gestionar</flux:button>
-                                    @endif
+                                    <div class="flex gap-2">
+                                        @if(auth()->user()->isAdmin())
+                                            <flux:button size="sm" icon="pencil-square" href="{{ route('work-orders.edit', $order) }}" variant="ghost" />
+                                        @else
+                                            <flux:button size="sm" icon="eye" href="{{ route('work-orders.show', $order) }}" variant="ghost">Gestionar</flux:button>
+                                            @if($order->status === 'completed')
+                                                <form action="{{ route('work-orders.report', $order) }}" method="POST">
+                                                    @csrf
+                                                    <flux:button size="sm" icon="document-text" type="submit" variant="filled" class="bg-blue-600 hover:bg-blue-700 text-white border-none">Generar Reporte</flux:button>
+                                                </form>
+                                            @endif
+                                        @endif
+                                    </div>
                                 </td>
                             </tr>
                         @empty

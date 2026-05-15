@@ -2,7 +2,7 @@
     <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
         <div class="flex items-center justify-between">
             <flux:heading size="xl" level="1">Equipos de Red</flux:heading>
-            <flux:button icon="plus" variant="primary" href="#">Nuevo Equipo</flux:button>
+            <flux:button icon="plus" variant="primary" href="{{ route('devices.create') }}" wire:navigate>Nuevo Equipo</flux:button>
         </div>
 
         <div class="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-700 dark:bg-zinc-900">
@@ -17,6 +17,7 @@
                     <thead>
                         <tr class="border-b border-zinc-200 dark:border-zinc-700">
                             <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white">Equipo / IP</th>
+                            <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white">Cliente</th>
                             <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white">Acciones</th>
                         </tr>
                     </thead>
@@ -27,8 +28,12 @@
                                     <b>{{ $device->brand }} {{ $device->model }}</b> <br>
                                     <span class="text-xs text-zinc-500">SN: {{ $device->serial_number }} - IP: {{ $device->ip_address }}</span>
                                 </td>
+                                <td class="px-4 py-3 text-zinc-600 dark:text-zinc-400">
+                                    {{ $device->client->name }}
+                                </td>
                                 <td class="px-4 py-3">
                                     <div class="flex gap-2">
+                                        <flux:button size="sm" icon="pencil-square" href="{{ route('devices.edit', $device) }}" variant="ghost" wire:navigate />
                                         <form action="{{ route('devices.destroy', $device) }}" method="POST" onsubmit="return confirm('¿Seguro que deseas eliminar este equipo?')">
                                             @csrf
                                             @method('DELETE')

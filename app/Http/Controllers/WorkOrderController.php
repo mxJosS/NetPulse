@@ -10,8 +10,8 @@ class WorkOrderController extends Controller
     {
         $user = auth()->user();
         $workOrders = $user->isAdmin() 
-            ? WorkOrder::with(['client', 'device', 'engineer'])->latest()->get()
-            : WorkOrder::where('user_id', $user->id)->with(['client', 'device'])->latest()->get();
+            ? WorkOrder::with(['client', 'device', 'engineer'])->orderBy('id', 'desc')->get()
+            : WorkOrder::where('user_id', $user->id)->with(['client', 'device'])->orderBy('id', 'desc')->get();
 
         return view('work_orders.index', compact('workOrders'));
     }
@@ -38,6 +38,7 @@ class WorkOrderController extends Controller
             'user_id' => 'required|exists:users,id',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
+            'service_address' => 'required|string|max:255',
             'status' => 'required|in:pending,on_site,completed',
         ]);
 

@@ -46,6 +46,7 @@
                 </div>
 
                 <flux:input label="Título de la Orden" name="title" value="{{ old('title') }}" placeholder="Ej: Mantenimiento preventivo..." required />
+                <flux:input label="Dirección del Servicio" name="service_address" value="{{ old('service_address') }}" placeholder="Ej: Av. Principal #123, Col. Centro" required />
                 <flux:textarea label="Descripción" name="description" placeholder="Detalles del problema o trabajo a realizar..." required>{{ old('description') }}</flux:textarea>
 
                 <div class="flex gap-2">

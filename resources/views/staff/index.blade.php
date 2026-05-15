@@ -2,7 +2,7 @@
     <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
         <div class="flex items-center justify-between">
             <flux:heading size="xl" level="1">Gestión de Personal</flux:heading>
-            <flux:button icon="plus" variant="primary" href="{{ route('staff.create') }}">Nuevo Ingeniero</flux:button>
+            <flux:button icon="plus" variant="primary" href="{{ route('staff.create') }}" wire:navigate>Nuevo Ingeniero</flux:button>
         </div>
 
         <div class="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-700 dark:bg-zinc-900">
@@ -33,7 +33,7 @@
                                 <td class="px-4 py-3 text-zinc-600 dark:text-zinc-400">{{ $user->email }}</td>
                                 <td class="px-4 py-3">
                                     <div class="flex gap-2">
-                                        <flux:button size="sm" icon="pencil-square" href="{{ route('staff.edit', $user) }}" variant="ghost" />
+                                        <flux:button size="sm" icon="pencil-square" href="{{ route('staff.edit', $user) }}" variant="ghost" wire:navigate />
                                         <form action="{{ route('staff.destroy', $user) }}" method="POST" onsubmit="return confirm('¿Eliminar ingeniero?')">
                                             @csrf
                                             @method('DELETE')

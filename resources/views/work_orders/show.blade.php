@@ -16,6 +16,10 @@
                     <flux:text>{{ $workOrder->description }}</flux:text>
                 </div>
                 <div>
+                    <flux:text size="sm" class="font-medium text-zinc-500">Dirección del Servicio</flux:text>
+                    <flux:text class="font-bold text-blue-600 dark:text-blue-400">{{ $workOrder->service_address ?? 'No especificada' }}</flux:text>
+                </div>
+                <div>
                     <flux:text size="sm" class="font-medium text-zinc-500">Cliente</flux:text>
                     <flux:text>{{ $workOrder->client->name }}</flux:text>
                 </div>

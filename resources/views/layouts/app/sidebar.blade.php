@@ -21,20 +21,20 @@
                 </flux:sidebar.item>
 
                 @if(auth()->user()->isAdmin())
-                    <flux:sidebar.item icon="user-group" :href="route('staff.index')" :current="request()->routeIs('staff.*')">
+                    <flux:sidebar.item icon="user-group" :href="route('staff.index')" :current="request()->routeIs('staff.*')" wire:navigate>
                         Personal
                     </flux:sidebar.item>
 
-                    <flux:sidebar.item icon="users" :href="route('clients.index')" :current="request()->routeIs('clients.*')">
+                    <flux:sidebar.item icon="users" :href="route('clients.index')" :current="request()->routeIs('clients.*')" wire:navigate>
                         Clientes
                     </flux:sidebar.item>
 
-                    <flux:sidebar.item icon="server-stack" :href="route('devices.index')" :current="request()->routeIs('devices.*')">
+                    <flux:sidebar.item icon="server-stack" :href="route('devices.index')" :current="request()->routeIs('devices.*')" wire:navigate>
                         Equipos de Red
                     </flux:sidebar.item>
                 @endif
 
-                <flux:sidebar.item icon="clipboard-document-check" :href="route('work-orders.index')" :current="request()->routeIs('work-orders.*')">
+                <flux:sidebar.item icon="clipboard-document-check" :href="route('work-orders.index')" :current="request()->routeIs('work-orders.*')" wire:navigate>
                     Órdenes de Trabajo
                 </flux:sidebar.item>
             </flux:sidebar.group>

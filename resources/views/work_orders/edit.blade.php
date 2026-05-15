@@ -17,6 +17,7 @@
 
                 @if(!auth()->user()->isEngineer())
                     <flux:input label="Título" name="title" value="{{ $workOrder->title }}" required />
+                    <flux:input label="Dirección del Servicio" name="service_address" value="{{ $workOrder->service_address }}" required />
                     <flux:textarea label="Descripción" name="description" required>{{ $workOrder->description }}</flux:textarea>
                     
                     <flux:select label="Asignar Ingeniero" name="user_id" required>

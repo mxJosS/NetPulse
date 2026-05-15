@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between">
             <flux:heading size="xl" level="1">Órdenes de Trabajo</flux:heading>
             @if(auth()->user()->isAdmin())
-                <flux:button icon="plus" variant="primary" href="{{ route('work-orders.create') }}">Nueva Orden</flux:button>
+                <flux:button icon="plus" variant="primary" href="{{ route('work-orders.create') }}" wire:navigate>Nueva Orden</flux:button>
             @endif
         </div>
 
@@ -18,8 +18,10 @@
                 <table class="w-full text-left text-sm">
                     <thead>
                         <tr class="border-b border-zinc-200 dark:border-zinc-700">
-                            <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white">ID / Cliente</th>
+                            <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white">ID</th>
+                            <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white">Cliente</th>
                             <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white">Equipo</th>
+                            <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white">Ingeniero</th>
                             <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white">Estado</th>
                             <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white">Acciones</th>
                         </tr>
@@ -27,13 +29,18 @@
                     <tbody class="divide-y divide-zinc-200 dark:divide-zinc-700">
                         @forelse($workOrders as $order)
                             <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-                                <td class="px-4 py-3 text-zinc-700 dark:text-zinc-300 font-medium">
-                                    <b>#{{ $order->id }}</b> <br>
-                                    <span class="text-xs text-zinc-500">{{ $order->client->name }}</span>
+                                <td class="px-4 py-3 text-zinc-700 dark:text-zinc-300 font-bold">
+                                    #{{ $order->id }}
+                                </td>
+                                <td class="px-4 py-3 text-zinc-600 dark:text-zinc-400">
+                                    {{ $order->client->name }}
                                 </td>
                                 <td class="px-4 py-3 text-zinc-600 dark:text-zinc-400">
                                     {{ $order->device->brand }} <br>
                                     <span class="text-xs text-zinc-500">SN: {{ $order->device->serial_number }}</span>
+                                </td>
+                                <td class="px-4 py-3 text-zinc-600 dark:text-zinc-400">
+                                    {{ $order->engineer->name ?? 'Sin asignar' }}
                                 </td>
                                 <td class="px-4 py-3">
                                     <flux:badge :color="match($order->status) {
@@ -48,9 +55,9 @@
                                 <td class="px-4 py-3">
                                     <div class="flex gap-2">
                                         @if(auth()->user()->isAdmin())
-                                            <flux:button size="sm" icon="pencil-square" href="{{ route('work-orders.edit', $order) }}" variant="ghost" />
+                                            <flux:button size="sm" icon="pencil-square" href="{{ route('work-orders.edit', $order) }}" variant="ghost" wire:navigate />
                                         @else
-                                            <flux:button size="sm" icon="eye" href="{{ route('work-orders.show', $order) }}" variant="ghost">Gestionar</flux:button>
+                                            <flux:button size="sm" icon="eye" href="{{ route('work-orders.show', $order) }}" variant="ghost" wire:navigate>Gestionar</flux:button>
                                             @if($order->status === 'completed')
                                                 <form action="{{ route('work-orders.report', $order) }}" method="POST">
                                                     @csrf

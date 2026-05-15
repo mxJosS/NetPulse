@@ -14,7 +14,9 @@ class UpdateWorkOrderRequest extends FormRequest
         return [
             'title' => 'sometimes|string|max:255',
             'description' => 'sometimes|string',
-            'status' => 'sometimes|in:pending,on_site,completed'
+            'service_address' => 'sometimes|string|max:255',
+            'status' => 'sometimes|in:pending,on_site,completed',
+            'user_id' => 'sometimes|exists:users,id',
         ];
     }
 }

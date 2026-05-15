@@ -47,7 +47,7 @@
                     <td>{{ $order->device->brand }} {{ $order->device->model }}</td>
                     <td>{{ $order->engineer->name ?? 'N/A' }}</td>
                     <td class="status-{{ str_replace('_', '', $order->status) }}">
-                        {{ strtoupper($order->status) }}
+                        {{ $order->formattedStatus() }}
                     </td>
                 </tr>
             @endforeach

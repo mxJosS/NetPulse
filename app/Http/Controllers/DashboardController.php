@@ -24,6 +24,7 @@ class DashboardController extends Controller
                     'pending' => WorkOrder::where('status', 'pending')->count(),
                     'on_site' => WorkOrder::where('status', 'on_site')->count(),
                     'completed' => WorkOrder::where('status', 'completed')->count(),
+                    'cancelled' => WorkOrder::where('status', 'cancelled')->count(),
                 ],
                 'recent_activity' => WorkOrder::with(['client', 'engineer'])->orderBy('id', 'desc')->take(5)->get(),
             ];

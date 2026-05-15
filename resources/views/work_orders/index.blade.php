@@ -47,9 +47,10 @@
                                         'pending' => 'yellow',
                                         'on_site' => 'blue',
                                         'completed' => 'green',
+                                        'cancelled' => 'red',
                                         default => 'zinc',
                                     }" size="sm">
-                                        {{ strtoupper($order->status) }}
+                                        {{ $order->formattedStatus() }}
                                     </flux:badge>
                                 </td>
                                 <td class="px-4 py-3">

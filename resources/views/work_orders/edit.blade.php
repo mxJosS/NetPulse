@@ -5,14 +5,15 @@
         </div>
 
         <div class="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-700 dark:bg-zinc-900">
-            <form action="{{ route('work-orders.update', $workOrder) }}" method="POST" class="space-y-6">
+            <form id="editForm" action="{{ route('work-orders.update', $workOrder) }}" method="POST" class="space-y-6" x-data x-init="@if($errors->has('cancellation_reason')) setTimeout(() => $flux.modal('cancel-modal').show(), 100) @endif">
                 @csrf
                 @method('PUT')
                 
-                <flux:select label="Estado" name="status">
-                    <option value="pending" {{ $workOrder->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                    <option value="on_site" {{ $workOrder->status == 'on_site' ? 'selected' : '' }}>On Site</option>
-                    <option value="completed" {{ $workOrder->status == 'completed' ? 'selected' : '' }}>Completed</option>
+                <flux:select label="Estado" id="statusSelect" name="status" :error="$errors->first('status')">
+                    <option value="pending" {{ $workOrder->status == 'pending' ? 'selected' : '' }}>PENDIENTE</option>
+                    <option value="on_site" {{ $workOrder->status == 'on_site' ? 'selected' : '' }}>ON SITE</option>
+                    <option value="completed" {{ $workOrder->status == 'completed' ? 'selected' : '' }}>COMPLETADO</option>
+                    <option value="cancelled" {{ $workOrder->status == 'cancelled' ? 'selected' : '' }}>CANCELADO</option>
                 </flux:select>
 
                 @if(!auth()->user()->isEngineer())
@@ -30,9 +31,23 @@
                 @endif
 
                 <div class="flex gap-2">
-                    <flux:button type="submit" variant="primary">Actualizar</flux:button>
+                    <flux:button type="button" variant="primary" x-on:click="document.getElementById('statusSelect').value === 'cancelled' ? $flux.modal('cancel-modal').show() : document.getElementById('editForm').submit()">Actualizar</flux:button>
                     <flux:button href="{{ route('work-orders.index') }}" variant="ghost">Cancelar</flux:button>
                 </div>
+
+                <!-- Modal para el motivo de cancelación -->
+                <flux:modal name="cancel-modal" title="Confirmar Cancelación" class="space-y-4">
+                    <flux:text>Por favor, ingrese el motivo por el cual se cancela esta orden de trabajo.</flux:text>
+                    
+                    <flux:textarea label="Motivo de Cancelación" name="cancellation_reason" id="cancellationReasonInput" placeholder="Ej: Cliente no se encontraba en el sitio..." :error="$errors->first('cancellation_reason')">{{ old('cancellation_reason', $workOrder->cancellation_reason) }}</flux:textarea>
+                    
+                    <div class="flex gap-2 justify-end">
+                        <flux:modal.close>
+                            <flux:button variant="ghost">Atrás</flux:button>
+                        </flux:modal.close>
+                        <flux:button type="submit" variant="danger">Confirmar y Cancelar</flux:button>
+                    </div>
+                </flux:modal>
             </form>
         </div>
     </div>

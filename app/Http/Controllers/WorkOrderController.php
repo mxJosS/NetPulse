@@ -39,7 +39,8 @@ class WorkOrderController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'service_address' => 'required|string|max:255',
-            'status' => 'required|in:pending,on_site,completed',
+            'status' => 'required|in:pending,on_site,completed,cancelled',
+            'cancellation_reason' => 'required_if:status,cancelled|nullable|string',
         ]);
 
         WorkOrder::create($validated);
@@ -64,11 +65,17 @@ class WorkOrderController extends Controller
     {
         if (auth()->user()->isEngineer() && $workOrder->user_id !== auth()->id()) abort(403);
         
+        $allowedStatuses = ['pending', 'on_site', 'completed'];
+        if (auth()->user()->isAdmin()) {
+            $allowedStatuses[] = 'cancelled';
+        }
+
         $validated = $request->validate([
-            'status' => 'required|in:pending,on_site,completed',
+            'status' => 'required|in:' . implode(',', $allowedStatuses),
+            'cancellation_reason' => 'required_if:status,cancelled|nullable|string',
         ]);
 
-        $workOrder->update(['status' => $validated['status']]);
+        $workOrder->update($validated);
         return redirect()->route('work-orders.index')->with('success', 'Estado de la orden actualizado.');
     }
 

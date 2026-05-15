@@ -107,10 +107,16 @@
                                                 'pending' => 'yellow',
                                                 'on_site' => 'blue',
                                                 'completed' => 'green',
+                                                'cancelled' => 'red',
                                                 default => 'zinc',
                                             }" size="sm">
-                                                {{ strtoupper($activity->status) }}
+                                                {{ $activity->formattedStatus() }}
                                             </flux:badge>
+                                            @if($activity->status === 'cancelled' && $activity->cancellation_reason)
+                                                <div class="mt-1 text-[10px] text-red-600 dark:text-red-400 italic max-w-[150px] truncate mx-auto" title="{{ $activity->cancellation_reason }}">
+                                                    {{ $activity->cancellation_reason }}
+                                                </div>
+                                            @endif
                                         </td>
                                         <td class="py-3 pl-4 text-right text-zinc-500 text-xs">
                                             {{ $activity->engineer->name ?? 'Sin asignar' }}
@@ -158,14 +164,15 @@
                     window.dashboardOrdersChart = new Chart(ctx, {
                         type: 'doughnut',
                         data: {
-                            labels: ['Pendientes', 'En Sitio', 'Completadas'],
+                            labels: ['Pendientes', 'En Sitio', 'Completadas', 'Canceladas'],
                             datasets: [{
                                 data: [
                                     {{ $stats['orders_by_status']['pending'] }},
                                     {{ $stats['orders_by_status']['on_site'] }},
-                                    {{ $stats['orders_by_status']['completed'] }}
+                                    {{ $stats['orders_by_status']['completed'] }},
+                                    {{ $stats['orders_by_status']['cancelled'] }}
                                 ],
-                                backgroundColor: ['#EAB308', '#2563EB', '#16A34A'],
+                                backgroundColor: ['#EAB308', '#2563EB', '#16A34A', '#EF4444'],
                                 borderWidth: 0,
                                 hoverOffset: 4
                             }]
@@ -225,9 +232,10 @@
                                         <flux:badge :color="match($order->status) {
                                             'pending' => 'yellow',
                                             'on_site' => 'blue',
+                                            'cancelled' => 'red',
                                             default => 'zinc',
                                         }" size="sm">
-                                            {{ strtoupper($order->status) }}
+                                            {{ $order->formattedStatus() }}
                                         </flux:badge>
                                     </td>
                                     <td class="px-4 py-3">

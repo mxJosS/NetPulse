@@ -2,7 +2,9 @@
     <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
         <div class="flex items-center justify-between">
             <flux:heading size="xl" level="1">Órdenes de Trabajo</flux:heading>
-            <flux:button icon="plus" variant="primary" href="#">Nueva Orden</flux:button>
+            @if(auth()->user()->isAdmin())
+                <flux:button icon="plus" variant="primary" href="#">Nueva Orden</flux:button>
+            @endif
         </div>
 
         <div class="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-700 dark:bg-zinc-900">
@@ -44,7 +46,11 @@
                                     </flux:badge>
                                 </td>
                                 <td class="px-4 py-3">
-                                    <flux:button size="sm" icon="pencil-square" href="{{ route('work-orders.edit', $order) }}" variant="ghost" />
+                                    @if(auth()->user()->isAdmin())
+                                        <flux:button size="sm" icon="pencil-square" href="{{ route('work-orders.edit', $order) }}" variant="ghost" />
+                                    @else
+                                        <flux:button size="sm" icon="eye" href="{{ route('work-orders.show', $order) }}" variant="ghost">Gestionar</flux:button>
+                                    @endif
                                 </td>
                             </tr>
                         @empty

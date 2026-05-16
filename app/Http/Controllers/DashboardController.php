@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use App\Models\Device;
 use App\Models\WorkOrder;
-use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class DashboardController extends Controller
 {
@@ -34,7 +34,7 @@ class DashboardController extends Controller
                 'pending_orders_count' => WorkOrder::where('user_id', $user->id)->where('status', 'pending')->count(),
                 'completed_orders_count' => WorkOrder::where('user_id', $user->id)->where('status', 'completed')->count(),
                 'total_orders_count' => WorkOrder::where('user_id', $user->id)->count(),
-                'active_orders' => WorkOrder::where('user_id', $user->id)->whereIn('status', ['pending', 'on_site'])->with('client', 'device')->orderBy('id', 'desc')->get(),
+                'active_orders' => WorkOrder::where('user_id', $user->id)->whereIn('status', ['pending', 'on_site', 'cancelled'])->with('client', 'device')->orderBy('id', 'desc')->take(10)->get(),
             ];
         }
 
@@ -59,7 +59,8 @@ class DashboardController extends Controller
     private function generateGlobalReport($period, $since)
     {
         $workOrders = WorkOrder::where('created_at', '>=', $since)->with(['client', 'device', 'engineer'])->get();
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.global-report', compact('workOrders', 'period'));
+        $pdf = Pdf::loadView('pdf.global-report', compact('workOrders', 'period'));
+
         return $pdf->download("Reporte_Ejecutivo_{$period}.pdf");
     }
 }

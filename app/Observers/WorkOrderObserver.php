@@ -1,8 +1,9 @@
 <?php
+
 namespace App\Observers;
 
-use App\Models\WorkOrder;
 use App\Jobs\GenerateServiceLogJob;
+use App\Models\WorkOrder;
 use Illuminate\Support\Facades\Log;
 
 class WorkOrderObserver

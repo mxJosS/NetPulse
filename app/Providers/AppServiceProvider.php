@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\WorkOrder;
+use App\Observers\WorkOrderObserver;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
-        \App\Models\WorkOrder::observe(\App\Observers\WorkOrderObserver::class);
+        WorkOrder::observe(WorkOrderObserver::class);
     }
 
     /**

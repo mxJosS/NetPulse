@@ -12,6 +12,7 @@ class StaffController extends Controller
     public function index()
     {
         $staff = User::where('role', 'engineer')->latest()->get();
+
         return view('staff.index', compact('staff'));
     }
 
@@ -40,17 +41,22 @@ class StaffController extends Controller
 
     public function edit(User $staff)
     {
-        if ($staff->role !== 'engineer') abort(404);
+        if ($staff->role !== 'engineer') {
+            abort(404);
+        }
+
         return view('staff.edit', compact('staff'));
     }
 
     public function update(Request $request, User $staff)
     {
-        if ($staff->role !== 'engineer') abort(404);
+        if ($staff->role !== 'engineer') {
+            abort(404);
+        }
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $staff->id],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$staff->id],
         ]);
 
         $staff->update([
@@ -68,8 +74,11 @@ class StaffController extends Controller
 
     public function destroy(User $staff)
     {
-        if ($staff->role !== 'engineer') abort(404);
+        if ($staff->role !== 'engineer') {
+            abort(404);
+        }
         $staff->delete();
+
         return redirect()->route('staff.index')->with('success', 'Ingeniero eliminado.');
     }
 }

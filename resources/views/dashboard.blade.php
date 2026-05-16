@@ -102,21 +102,24 @@
                                         <td class="py-3 px-4 text-zinc-500">
                                             {{ $activity->client->name }}
                                         </td>
-                                        <td class="py-3 px-4 text-center">
-                                            <flux:badge :color="match($activity->status) {
-                                                'pending' => 'yellow',
-                                                'on_site' => 'blue',
-                                                'completed' => 'green',
-                                                'cancelled' => 'red',
-                                                default => 'zinc',
-                                            }" size="sm">
-                                                {{ $activity->formattedStatus() }}
-                                            </flux:badge>
-                                            @if($activity->status === 'cancelled' && $activity->cancellation_reason)
-                                                <div class="mt-1 text-[10px] text-red-600 dark:text-red-400 italic max-w-[150px] truncate mx-auto" title="{{ $activity->cancellation_reason }}">
-                                                    {{ $activity->cancellation_reason }}
-                                                </div>
-                                            @endif
+                                        <td class="py-3 px-4">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <flux:badge :color="match($activity->status) {
+                                                    'pending' => 'yellow',
+                                                    'on_site' => 'blue',
+                                                    'completed' => 'green',
+                                                    'cancelled' => 'red',
+                                                    default => 'zinc',
+                                                }" size="sm">
+                                                    {{ $activity->formattedStatus() }}
+                                                </flux:badge>
+
+                                                @if($activity->status === 'cancelled' && $activity->cancellation_reason)
+                                                    <flux:tooltip :content="$activity->cancellation_reason" position="top" class="cursor-help">
+                                                        <flux:icon name="exclamation-circle" class="text-red-500 hover:text-red-600 h-4 w-4" />
+                                                    </flux:tooltip>
+                                                @endif
+                                            </div>
                                         </td>
                                         <td class="py-3 pl-4 text-right text-zinc-500 text-xs">
                                             {{ $activity->engineer->name ?? 'Sin asignar' }}
@@ -225,19 +228,33 @@
                                         <span class="text-xs text-zinc-500">{{ $order->client->name }}</span>
                                     </td>
                                     <td class="px-4 py-3 text-zinc-600 dark:text-zinc-400">
-                                        {{ $order->device->brand }} <br>
-                                        <span class="text-xs text-zinc-500">SN: {{ $order->device->serial_number }}</span>
+                                        @if($order->device)
+                                            {{ $order->device->brand }} <br>
+                                            <span class="text-xs text-zinc-500">SN: {{ $order->device->serial_number }}</span>
+                                        @else
+                                            <span class="text-red-500 italic text-xs">Equipo no disponible</span>
+                                        @endif
                                     </td>
                                     <td class="px-4 py-3">
-                                        <flux:badge :color="match($order->status) {
-                                            'pending' => 'yellow',
-                                            'on_site' => 'blue',
-                                            'cancelled' => 'red',
-                                            default => 'zinc',
-                                        }" size="sm">
-                                            {{ $order->formattedStatus() }}
-                                        </flux:badge>
+                                        <div class="flex items-center gap-2">
+                                            <flux:badge :color="match($order->status) {
+                                                'pending' => 'yellow',
+                                                'on_site' => 'blue',
+                                                'completed' => 'green',
+                                                'cancelled' => 'red',
+                                                default => 'zinc',
+                                            }" size="sm">
+                                                {{ $order->formattedStatus() }}
+                                            </flux:badge>
+
+                                            @if($order->status === 'cancelled' && $order->cancellation_reason)
+                                                <flux:tooltip :content="$order->cancellation_reason" position="top" class="cursor-help">
+                                                    <flux:icon name="exclamation-circle" class="text-red-500 hover:text-red-600 h-4 w-4" />
+                                                </flux:tooltip>
+                                            @endif
+                                        </div>
                                     </td>
+
                                     <td class="px-4 py-3">
                                         <flux:button size="sm" icon="eye" href="{{ route('work-orders.show', $order) }}" variant="ghost">Gestionar</flux:button>
                                     </td>

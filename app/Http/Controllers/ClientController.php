@@ -10,6 +10,7 @@ class ClientController extends Controller
     public function index()
     {
         $clients = Client::latest()->get();
+
         return view('clients.index', compact('clients'));
     }
 
@@ -46,7 +47,7 @@ class ClientController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:clients,email,' . $client->id,
+            'email' => 'required|email|unique:clients,email,'.$client->id,
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string',
         ]);
@@ -59,6 +60,7 @@ class ClientController extends Controller
     public function destroy(Client $client)
     {
         $client->delete();
+
         return redirect()->route('clients.index')->with('success', 'Cliente eliminado con éxito.');
     }
 }

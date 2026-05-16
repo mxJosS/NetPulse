@@ -36,8 +36,12 @@
                                     {{ $order->client->name }}
                                 </td>
                                 <td class="px-4 py-3 text-zinc-600 dark:text-zinc-400">
-                                    {{ $order->device->brand }} <br>
-                                    <span class="text-xs text-zinc-500">SN: {{ $order->device->serial_number }}</span>
+                                    @if($order->device)
+                                        {{ $order->device->brand }} <br>
+                                        <span class="text-xs text-zinc-500">SN: {{ $order->device->serial_number }}</span>
+                                    @else
+                                        <span class="text-red-500 italic text-xs">Equipo no disponible</span>
+                                    @endif
                                 </td>
                                 <td class="px-4 py-3 text-zinc-600 dark:text-zinc-400">
                                     {{ $order->engineer->name ?? 'Sin asignar' }}
@@ -52,7 +56,14 @@
                                     }" size="sm">
                                         {{ $order->formattedStatus() }}
                                     </flux:badge>
+
+                                    @if($order->status === 'cancelled' && $order->cancellation_reason)
+                                        <div class="mt-1 text-[10px] text-red-600 dark:text-red-400 italic max-w-[200px] truncate" title="{{ $order->cancellation_reason }}">
+                                            Motivo: {{ $order->cancellation_reason }}
+                                        </div>
+                                    @endif
                                 </td>
+
                                 <td class="px-4 py-3">
                                     <div class="flex gap-2">
                                         @if(auth()->user()->isAdmin())

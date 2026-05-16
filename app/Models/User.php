@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,13 +14,25 @@ class User extends Authenticatable
 
     protected $hidden = ['password', 'remember_token'];
 
-    protected function casts(): array {
+    protected function casts(): array
+    {
         return ['email_verified_at' => 'datetime', 'password' => 'hashed'];
     }
 
-    public function isAdmin(): bool { return $this->role === 'admin'; }
-    public function isEngineer(): bool { return $this->role === 'engineer'; }
-    public function workOrders() { return $this->hasMany(WorkOrder::class); }
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isEngineer(): bool
+    {
+        return $this->role === 'engineer';
+    }
+
+    public function workOrders()
+    {
+        return $this->hasMany(WorkOrder::class);
+    }
 
     public function initials(): string
     {

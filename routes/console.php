@@ -8,4 +8,5 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 use Illuminate\Support\Facades\Schedule;
+
 Schedule::command('noclite:check-stale')->dailyAt('07:00');

@@ -1,6 +1,9 @@
-<x-layouts::auth :title="__('Reset password')">
+<x-layouts::auth :title="__('Restablecer Contraseña')">
     <div class="flex flex-col gap-6">
-        <x-auth-header :title="__('Reset password')" :description="__('Please enter your new password below')" />
+        <x-auth-header 
+            :title="__('Nueva Contraseña')" 
+            :description="__('Por favor, ingresa tu nueva contraseña para recuperar el acceso')" 
+        />
 
         <!-- Session Status -->
         <x-auth-session-status class="text-center" :status="session('status')" />
@@ -14,41 +17,44 @@
             <flux:input
                 name="email"
                 value="{{ request('email') }}"
-                :label="__('Email')"
+                :label="__('Correo Electrónico')"
                 type="email"
                 required
                 autocomplete="email"
+                icon="envelope"
             />
 
             <!-- Password -->
             <flux:input
                 name="password"
-                :label="__('Password')"
+                :label="__('Nueva Contraseña')"
                 type="password"
                 required
                 autocomplete="new-password"
-                :placeholder="__('Password')"
+                :placeholder="__('Mínimo 8 caracteres')"
                 passwordrules="{{ \Illuminate\Validation\Rules\Password::defaults()->toPasswordRulesString() }}"
+                icon="lock-closed"
                 viewable
             />
 
             <!-- Confirm Password -->
             <flux:input
                 name="password_confirmation"
-                :label="__('Confirm password')"
+                :label="__('Confirmar Nueva Contraseña')"
                 type="password"
                 required
                 autocomplete="new-password"
-                :placeholder="__('Confirm password')"
-                passwordrules="{{ \Illuminate\Validation\Rules\Password::defaults()->toPasswordRulesString() }}"
+                :placeholder="__('Repite la contraseña')"
+                icon="lock-closed"
                 viewable
             />
 
             <div class="flex items-center justify-end">
-                <flux:button type="submit" variant="primary" class="w-full" data-test="reset-password-button">
-                    {{ __('Reset password') }}
+                <flux:button type="submit" variant="primary" class="w-full bg-blue-600 hover:bg-blue-700" data-test="reset-password-button">
+                    {{ __('Restablecer Contraseña') }}
                 </flux:button>
             </div>
         </form>
     </div>
 </x-layouts::auth>
+

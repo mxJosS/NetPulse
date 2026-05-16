@@ -34,11 +34,39 @@
                                 <td class="px-4 py-3">
                                     <div class="flex gap-2">
                                         <flux:button size="sm" icon="pencil-square" href="{{ route('devices.edit', $device) }}" variant="ghost" wire:navigate />
-                                        <form action="{{ route('devices.destroy', $device) }}" method="POST" onsubmit="return confirm('¿Seguro que deseas eliminar este equipo?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <flux:button size="sm" icon="trash" type="submit" variant="ghost" class="text-red-500 hover:text-red-600" />
-                                        </form>
+                                        
+                                        <flux:modal.trigger name="delete-device-{{ $device->id }}">
+                                            <flux:button size="sm" icon="trash" variant="ghost" class="text-red-500 hover:text-red-600" />
+                                        </flux:modal.trigger>
+
+                                        <flux:modal name="delete-device-{{ $device->id }}" class="md:w-[450px] p-6">
+                                            <div class="space-y-6">
+                                                <div class="flex items-start gap-4">
+                                                    <div class="rounded-full bg-red-100 p-3 text-red-600 dark:bg-red-900/30 dark:text-red-400">
+                                                        <flux:icon name="exclamation-triangle" />
+                                                    </div>
+                                                    <div class="flex-1">
+                                                        <flux:heading size="lg" class="mb-2">¿Confirmar eliminación?</flux:heading>
+                                                        <flux:subheading>
+                                                            Estás a punto de eliminar el equipo <span class="font-bold text-zinc-900 dark:text-white">{{ $device->brand }} {{ $device->model }}</span>. 
+                                                            ¿Estás seguro de que deseas continuar?
+                                                        </flux:subheading>
+                                                    </div>
+                                                </div>
+
+                                                <div class="flex gap-3">
+                                                    <flux:spacer />
+                                                    <flux:modal.close>
+                                                        <flux:button variant="ghost">Cancelar</flux:button>
+                                                    </flux:modal.close>
+                                                    <form action="{{ route('devices.destroy', $device) }}" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <flux:button type="submit" variant="danger">Eliminar Equipo</flux:button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </flux:modal>
                                     </div>
                                 </td>
                             </tr>

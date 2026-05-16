@@ -1,20 +1,22 @@
 <?php
+
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Models\WorkOrder;
 use App\Models\User;
+use App\Models\WorkOrder;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 
 class CheckStaleOrders extends Command
 {
     protected $signature = 'noclite:check-stale';
+
     protected $description = 'Alerta al Admin de órdenes pendientes por más de 48 hrs';
 
     public function handle()
     {
         $count = WorkOrder::where('status', 'pending')
-                    ->where('created_at', '<', now()->subHours(48))->count();
+            ->where('created_at', '<', now()->subHours(48))->count();
 
         if ($count > 0) {
             $admin = User::where('role', 'admin')->first();
@@ -25,7 +27,7 @@ class CheckStaleOrders extends Command
                 $this->info("Alerta enviada. Órdenes rezagadas: {$count}");
             }
         } else {
-            $this->info("Todo al día. No hay órdenes rezagadas.");
+            $this->info('Todo al día. No hay órdenes rezagadas.');
         }
     }
 }

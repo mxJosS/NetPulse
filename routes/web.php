@@ -30,6 +30,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('work-orders/{work_order}', [WorkOrderController::class, 'show'])->name('work-orders.show');
     Route::put('work-orders/{work_order}/status', [WorkOrderController::class, 'updateStatus'])->name('work-orders.update-status');
     Route::post('work-orders/{work_order}/report', [WorkOrderController::class, 'generateReport'])->name('work-orders.report');
+    Route::get('work-orders/{work_order}/download', [WorkOrderController::class, 'downloadReport'])->name('work-orders.download');
 });
 
 require __DIR__.'/settings.php';

@@ -118,8 +118,20 @@ class WorkOrderController extends Controller
             ->send(new ServiceReportMail($workOrder, $pdfPath));
 
         // 3. Simulate WhatsApp Notification
-        Log::info('WHATSAPP NOTIFICATION (To Admin): El ingeniero '.auth()->user()->name.' ha cerrado la orden #'.$workOrder->id.' del cliente '.$workOrder->client->name.'. El reporte ha sido enviado al cliente.');
-
         return redirect()->route('work-orders.index')->with('success', 'Reporte generado, email enviado y administrador notificado.');
+    }
+
+    public function downloadReport(WorkOrder $workOrder)
+    {
+        if (auth()->user()->isEngineer() && $workOrder->user_id !== auth()->id()) {
+            abort(403);
+        }
+        if ($workOrder->status !== 'completed') {
+            abort(400, 'Solo se puede descargar el reporte para órdenes completadas.');
+        }
+
+        $pdf = Pdf::loadView('pdf.service-report', compact('workOrder'));
+        
+        return $pdf->download("Reporte_Servicio_{$workOrder->id}.pdf");
     }
 }

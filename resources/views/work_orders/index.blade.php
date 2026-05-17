@@ -47,34 +47,40 @@
                                     {{ $order->engineer->name ?? 'Sin asignar' }}
                                 </td>
                                 <td class="px-4 py-3">
-                                    <flux:badge :color="match($order->status) {
-                                        'pending' => 'yellow',
-                                        'on_site' => 'blue',
-                                        'completed' => 'green',
-                                        'cancelled' => 'red',
-                                        default => 'zinc',
-                                    }" size="sm">
-                                        {{ $order->formattedStatus() }}
-                                    </flux:badge>
+                                    <div class="flex items-center gap-2">
+                                        <flux:badge :color="match($order->status) {
+                                            'pending' => 'yellow',
+                                            'on_site' => 'blue',
+                                            'completed' => 'green',
+                                            'cancelled' => 'red',
+                                            default => 'zinc',
+                                        }" size="sm">
+                                            {{ $order->formattedStatus() }}
+                                        </flux:badge>
 
-                                    @if($order->status === 'cancelled' && $order->cancellation_reason)
-                                        <div class="mt-1 text-[10px] text-red-600 dark:text-red-400 italic max-w-[200px] truncate" title="{{ $order->cancellation_reason }}">
-                                            Motivo: {{ $order->cancellation_reason }}
-                                        </div>
-                                    @endif
+                                        @if($order->status === 'cancelled' && $order->cancellation_reason)
+                                            <flux:tooltip :content="$order->cancellation_reason" position="top" class="cursor-help">
+                                                <flux:icon name="exclamation-circle" class="text-red-500 hover:text-red-600 h-4 w-4" />
+                                            </flux:tooltip>
+                                        @endif
+                                    </div>
                                 </td>
 
                                 <td class="px-4 py-3">
-                                    <div class="flex gap-2">
+                                    <div class="flex items-center gap-2">
                                         @if(auth()->user()->isAdmin())
                                             <flux:button size="sm" icon="pencil-square" href="{{ route('work-orders.edit', $order) }}" variant="ghost" wire:navigate />
+                                            @if($order->status === 'completed')
+                                                <flux:button size="sm" icon="arrow-down-tray" href="{{ route('work-orders.download', $order) }}" variant="ghost">Descargar</flux:button>
+                                            @endif
                                         @else
                                             <flux:button size="sm" icon="eye" href="{{ route('work-orders.show', $order) }}" variant="ghost" wire:navigate>Gestionar</flux:button>
                                             @if($order->status === 'completed')
-                                                <form action="{{ route('work-orders.report', $order) }}" method="POST">
+                                                <form action="{{ route('work-orders.report', $order) }}" method="POST" class="inline-block">
                                                     @csrf
                                                     <flux:button size="sm" icon="document-text" type="submit" variant="filled" class="bg-blue-600 hover:bg-blue-700 text-white border-none">Generar Reporte</flux:button>
                                                 </form>
+                                                <flux:button size="sm" icon="arrow-down-tray" href="{{ route('work-orders.download', $order) }}" variant="ghost">Descargar Reporte</flux:button>
                                             @endif
                                         @endif
                                     </div>

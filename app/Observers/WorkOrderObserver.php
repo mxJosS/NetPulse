@@ -13,7 +13,8 @@ class WorkOrderObserver
         if ($workOrder->isDirty('status')) {
             // Evento 1: Notificación WhatsApp cuando llega a sitio
             if ($workOrder->status === 'on_site') {
-                Log::info("[WhatsApp API a {$workOrder->client->phone}] 🟢 Hola {$workOrder->client->name}, el ingeniero {$workOrder->engineer->name} ha llegado a sus instalaciones para atender el equipo {$workOrder->device->serial_number}.");
+                $message = "🟢 Hola {$workOrder->client->name}, el ingeniero {$workOrder->engineer->name} ha llegado a sus instalaciones para atender el equipo {$workOrder->device->serial_number}.";
+                app(\App\Services\TwilioWhatsAppService::class)->sendWhatsApp($workOrder->client->phone, $message);
             }
             // Evento 2: Disparar Job de PDF al completar
             if ($workOrder->status === 'completed') {

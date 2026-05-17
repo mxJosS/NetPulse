@@ -12,7 +12,7 @@
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <flux:input label="Nombre completo" name="name" value="{{ old('name', $staff->name) }}" required />
                     <flux:input label="Correo electrónico" name="email" type="email" value="{{ old('email', $staff->email) }}" required />
-                    <flux:input label="Contraseña (dejar en blanco para no cambiar)" name="password" type="password" />
+                    <flux:input label="Contraseña" name="password" type="password" />
                 </div>
 
                 <div class="flex gap-2">

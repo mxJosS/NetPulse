@@ -47,8 +47,8 @@
             <!-- Remember Me -->
             <flux:checkbox name="remember" :label="__('Recordarme en este equipo')" :checked="old('remember')" />
 
-            <div class="flex items-center justify-end">
-                <flux:button variant="primary" type="submit" class="w-full bg-blue-600 hover:bg-blue-700" data-test="login-button">
+            <div class="flex items-center justify-end mt-2">
+                <flux:button variant="primary" type="submit" class="w-full bg-blue-600 hover:bg-blue-700 active:scale-98 text-white font-semibold py-3.5 rounded-xl shadow-lg shadow-blue-500/20 transition-all border-none" data-test="login-button">
                     {{ __('Iniciar Sesión') }}
                 </flux:button>
             </div>

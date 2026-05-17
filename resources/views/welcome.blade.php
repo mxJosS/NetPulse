@@ -47,11 +47,7 @@
     <!-- Top Navigation Header -->
     <header class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50 w-[92%] max-w-6xl bg-white/70 dark:bg-zinc-900/70 backdrop-blur-xl border border-slate-200/80 dark:border-zinc-800/80 rounded-2xl px-6 py-3 shadow-lg shadow-slate-100/50 dark:shadow-none flex items-center justify-between transition-all duration-300">
         <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center shadow-md shadow-blue-500/20">
-                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                </svg>
-            </div>
+            <img src="{{ asset('assets/img/netpulse.png') }}" alt="NetPulse Logo" class="h-9 w-auto hover:scale-105 transition-transform duration-300">
             <div class="flex flex-col">
                 <span class="font-display font-extrabold text-lg tracking-tight leading-none bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-zinc-300 bg-clip-text text-transparent">NetPulse</span>
                 <span class="text-[9px] font-bold text-blue-600 dark:text-blue-400 tracking-widest uppercase">NOC LITE SYSTEM</span>

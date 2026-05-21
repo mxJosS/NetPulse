@@ -20,7 +20,62 @@ Plataforma de soporte técnico para el registro, asignación y seguimiento de ó
 - Password: `password`
 
 ## 📊 Arquitectura (DER)
-- `users`: Gestiona autenticación y el `role` (admin/engineer).
-- `clients`: Clientes a los que se les presta servicio (1 a N con Equipos y Órdenes).
-- `devices`: Inventario de red (`client_id` FK). Posee *SoftDeletes* para evitar perder historial operativo.
-- `work_orders`: La tabla transaccional núcleo. Cruza al Cliente (`client_id`), Equipo (`device_id`) y al Ingeniero asignado (`user_id`). Su estado dispara eventos automatizados (Observers y Jobs).
+
+A continuación se muestra el modelo de Entidad-Relación de la base de datos de NOC Lite:
+
+```mermaid
+erDiagram
+    users {
+        bigint id PK
+        string name
+        string email UK
+        string password
+        string role
+        timestamp created_at
+        timestamp updated_at
+    }
+    clients {
+        bigint id PK
+        string name
+        string email UK
+        string phone
+        text address
+        timestamp created_at
+        timestamp updated_at
+    }
+    devices {
+        bigint id PK
+        bigint client_id FK
+        string brand
+        string model
+        string serial_number UK
+        string ip_address
+        timestamp deleted_at
+        timestamp created_at
+        timestamp updated_at
+    }
+    work_orders {
+        bigint id PK
+        bigint client_id FK
+        bigint device_id FK
+        bigint user_id FK
+        string title
+        text description
+        string service_address
+        enum status
+        text cancellation_reason
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    clients ||--o{ devices : "tiene"
+    clients ||--o{ work_orders : "solicita"
+    devices ||--o{ work_orders : "asociado_a"
+    users ||--o{ work_orders : "atiende"
+```
+
+### Detalle de Tablas:
+- `users`: Gestiona la autenticación y el rol del personal (`role`: admin/engineer).
+- `clients`: Clientes a los que se les presta servicio de mantenimiento.
+- `devices`: Inventario de red (`client_id` FK). Posee *SoftDeletes* para evitar perder el historial operativo cuando se desactiva un equipo.
+- `work_orders`: Tabla transaccional núcleo. Cruza al Cliente (`client_id`), Equipo (`device_id`) y al Ingeniero asignado (`user_id`). Su cambio de estado dispara eventos automatizados (Observers y Jobs).

@@ -16,22 +16,30 @@
                 <table class="w-full text-left text-sm">
                     <thead>
                         <tr class="border-b border-zinc-200 dark:border-zinc-700">
-                            <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white">Nombre</th>
-                            <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white">Email</th>
-                            <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white">Teléfono</th>
-                            <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white">Acciones</th>
+                            <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white">Cliente</th>
+                            <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white hidden md:table-cell">Email</th>
+                            <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white hidden sm:table-cell">Teléfono</th>
+                            <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white text-right">Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-zinc-200 dark:divide-zinc-700">
                         @forelse($clients as $client)
                             <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-                                <td class="px-4 py-3 text-zinc-700 dark:text-zinc-300 font-medium">{{ $client->name }}</td>
-                                <td class="px-4 py-3 text-zinc-600 dark:text-zinc-400">{{ $client->email }}</td>
-                                <td class="px-4 py-3 text-zinc-600 dark:text-zinc-400">{{ $client->phone ?? 'N/A' }}</td>
+                                <td class="px-4 py-3 text-zinc-700 dark:text-zinc-300 font-medium">
+                                    <a href="{{ route('clients.show', $client) }}" class="hover:underline font-bold text-blue-600 dark:text-blue-400 block">{{ $client->name }}</a>
+                                    <!-- Mobile details -->
+                                    <span class="block text-xs text-zinc-500 md:hidden mt-0.5">{{ $client->email }}</span>
+                                    @if($client->phone)
+                                        <span class="block text-[11px] text-zinc-400 sm:hidden">Tel: {{ $client->phone }}</span>
+                                    @endif
+                                </td>
+                                <td class="px-4 py-3 text-zinc-600 dark:text-zinc-400 hidden md:table-cell">{{ $client->email }}</td>
+                                <td class="px-4 py-3 text-zinc-600 dark:text-zinc-400 hidden sm:table-cell">{{ $client->phone ?? 'N/A' }}</td>
                                 <td class="px-4 py-3">
-                                    <div class="flex gap-2">
+                                    <div class="flex justify-end gap-1">
+                                        <flux:button size="sm" icon="eye" href="{{ route('clients.show', $client) }}" variant="ghost" wire:navigate />
                                         <flux:button size="sm" icon="pencil-square" href="{{ route('clients.edit', $client) }}" variant="ghost" wire:navigate />
-                                        <form action="{{ route('clients.destroy', $client) }}" method="POST" onsubmit="return confirm('¿Eliminar cliente?')">
+                                        <form action="{{ route('clients.destroy', $client) }}" method="POST" onsubmit="return confirm('¿Eliminar cliente?')" class="inline-block">
                                             @csrf
                                             @method('DELETE')
                                             <flux:button size="sm" icon="trash" type="submit" variant="ghost" class="text-red-500 hover:text-red-600" />

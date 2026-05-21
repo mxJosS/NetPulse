@@ -19,12 +19,16 @@ class GenerateServiceLogJob implements ShouldQueue
 
     public function handle(): void
     {
-        $pdf = Pdf::loadHtml("<h1>Bitácora de Servicio - Orden #{$this->workOrder->id}</h1><p>Equipo: {$this->workOrder->device->serial_number}</p><p>Estado: Completado</p>");
+        $workOrder = $this->workOrder;
 
-        Mail::raw('Adjuntamos su bitácora de servicio en formato PDF.', function ($message) use ($pdf) {
-            $message->to($this->workOrder->client->email)
-                ->subject("Bitácora de Servicio NOC Lite - Orden #{$this->workOrder->id}")
-                ->attachData($pdf->output(), "Bitacora_{$this->workOrder->id}.pdf");
-        });
+        // 1. Generar el PDF usando la vista Blade con el nuevo estilo premium
+        $pdf = Pdf::loadView('pdf.service-report', compact('workOrder'));
+        $fileName = 'reporte_'.$workOrder->id.'_'.time().'.pdf';
+        $pdfPath = storage_path('app/public/'.$fileName);
+        $pdf->save($pdfPath);
+
+        // 2. Enviar el correo electrónico con formato HTML premium y adjuntar el PDF
+        Mail::to($workOrder->client->email)
+            ->send(new \App\Mail\ServiceReportMail($workOrder, $pdfPath));
     }
 }

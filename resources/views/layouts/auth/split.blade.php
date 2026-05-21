@@ -48,7 +48,7 @@
         </style>
     </head>
     <body class="min-h-screen bg-slate-50 dark:bg-zinc-950 antialiased transition-colors duration-300">
-        <div class="relative grid h-dvh flex-col items-center justify-center px-8 sm:px-0 lg:max-w-none lg:grid-cols-2 lg:px-0 relative overflow-hidden">
+        <div class="relative grid min-h-screen lg:h-dvh flex-col items-center justify-center px-8 sm:px-0 lg:max-w-none lg:grid-cols-2 lg:px-0 overflow-hidden">
             
             <!-- Left Panel (Visual Showcase & Quotes) -->
             <div class="auth-gradient relative hidden h-full flex-col p-12 text-white lg:flex dark:border-e dark:border-zinc-900">

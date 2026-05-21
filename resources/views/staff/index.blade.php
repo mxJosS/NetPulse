@@ -16,9 +16,9 @@
                 <table class="w-full text-left text-sm">
                     <thead>
                         <tr class="border-b border-zinc-200 dark:border-zinc-700">
-                            <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white">Nombre</th>
-                            <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white">Email</th>
-                            <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white">Acciones</th>
+                            <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white">Nombre / Email</th>
+                            <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white hidden sm:table-cell">Email</th>
+                            <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white text-right">Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-zinc-200 dark:divide-zinc-700">
@@ -27,12 +27,15 @@
                                 <td class="px-4 py-3 text-zinc-700 dark:text-zinc-300 font-medium">
                                     <div class="flex items-center gap-3">
                                         <flux:avatar :name="$user->name" :initials="$user->initials()" size="sm" />
-                                        <span>{{ $user->name }}</span>
+                                        <div>
+                                            <span class="block font-semibold">{{ $user->name }}</span>
+                                            <span class="block text-xs text-zinc-500 sm:hidden">{{ $user->email }}</span>
+                                        </div>
                                     </div>
                                 </td>
-                                <td class="px-4 py-3 text-zinc-600 dark:text-zinc-400">{{ $user->email }}</td>
-                                <td class="px-4 py-3">
-                                    <div class="flex gap-2">
+                                <td class="px-4 py-3 text-zinc-600 dark:text-zinc-400 hidden sm:table-cell">{{ $user->email }}</td>
+                                <td class="px-4 py-3 text-right">
+                                    <div class="flex justify-end gap-2">
                                         <flux:button size="sm" icon="pencil-square" href="{{ route('staff.edit', $user) }}" variant="ghost" wire:navigate />
                                         <form action="{{ route('staff.destroy', $user) }}" method="POST" onsubmit="return confirm('¿Eliminar ingeniero?')">
                                             @csrf

@@ -87,20 +87,18 @@
                         <table class="w-full text-left text-sm">
                             <thead>
                                 <tr class="border-b border-zinc-100 dark:border-zinc-800">
-                                    <th class="py-3 pr-4 font-semibold text-zinc-900 dark:text-white">ID</th>
-                                    <th class="py-3 px-4 font-semibold text-zinc-900 dark:text-white">Cliente</th>
+                                    <th class="py-3 px-4 font-semibold text-zinc-900 dark:text-white">Orden / Cliente</th>
                                     <th class="py-3 px-4 font-semibold text-zinc-900 dark:text-white text-center">Estado</th>
-                                    <th class="py-3 pl-4 font-semibold text-zinc-900 dark:text-white text-right">Ingeniero</th>
+                                    <th class="py-3 px-4 font-semibold text-zinc-900 dark:text-white text-right hidden sm:table-cell">Ingeniero</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-zinc-200 dark:divide-zinc-700">
                                 @foreach($stats['recent_activity'] as $activity)
                                     <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-                                        <td class="py-3 pr-4 font-bold text-zinc-700 dark:text-zinc-300">
-                                            #{{ $activity->id }}
-                                        </td>
-                                        <td class="py-3 px-4 text-zinc-500">
-                                            {{ $activity->client->name }}
+                                        <td class="py-3 px-4 text-zinc-700 dark:text-zinc-300 font-medium">
+                                            <span class="font-bold text-zinc-900 dark:text-white">#{{ $activity->id }}</span>
+                                            <span class="text-zinc-500 block text-xs mt-0.5">{{ $activity->client->name }}</span>
+                                            <span class="text-[10px] text-zinc-400 block sm:hidden mt-0.5">Ing: {{ $activity->engineer->name ?? 'Sin asignar' }}</span>
                                         </td>
                                         <td class="py-3 px-4">
                                             <div class="flex items-center justify-center gap-2">
@@ -121,7 +119,7 @@
                                                 @endif
                                             </div>
                                         </td>
-                                        <td class="py-3 pl-4 text-right text-zinc-500 text-xs">
+                                        <td class="py-3 px-4 text-right text-zinc-500 text-xs hidden sm:table-cell">
                                             {{ $activity->engineer->name ?? 'Sin asignar' }}
                                         </td>
                                     </tr>
@@ -214,10 +212,10 @@
                     <table class="w-full text-left text-sm">
                         <thead>
                             <tr class="border-b border-zinc-200 dark:border-zinc-700">
-                                <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white">ID / Cliente</th>
-                                <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white">Equipo</th>
-                                <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white">Estado</th>
-                                <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white">Acciones</th>
+                                <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white">Orden / Cliente</th>
+                                <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white hidden sm:table-cell">Equipo</th>
+                                <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white text-center">Estado</th>
+                                <th class="px-4 py-3 font-semibold text-zinc-900 dark:text-white text-right">Acciones</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-zinc-200 dark:divide-zinc-700">
@@ -226,8 +224,13 @@
                                     <td class="px-4 py-3 text-zinc-700 dark:text-zinc-300 font-medium">
                                         <b>#{{ $order->id }}</b> <br>
                                         <span class="text-xs text-zinc-500">{{ $order->client->name }}</span>
+                                        @if($order->device)
+                                            <span class="block sm:hidden text-[10px] text-zinc-400 mt-1">
+                                                Eq: {{ $order->device->brand }} {{ $order->device->model }} (SN: {{ $order->device->serial_number }})
+                                            </span>
+                                        @endif
                                     </td>
-                                    <td class="px-4 py-3 text-zinc-600 dark:text-zinc-400">
+                                    <td class="px-4 py-3 text-zinc-600 dark:text-zinc-400 hidden sm:table-cell">
                                         @if($order->device)
                                             {{ $order->device->brand }} <br>
                                             <span class="text-xs text-zinc-500">SN: {{ $order->device->serial_number }}</span>
@@ -235,8 +238,8 @@
                                             <span class="text-red-500 italic text-xs">Equipo no disponible</span>
                                         @endif
                                     </td>
-                                    <td class="px-4 py-3">
-                                        <div class="flex items-center gap-2">
+                                    <td class="px-4 py-3 text-center">
+                                        <div class="flex items-center justify-center gap-2">
                                             <flux:badge :color="match($order->status) {
                                                 'pending' => 'yellow',
                                                 'on_site' => 'blue',
@@ -255,8 +258,10 @@
                                         </div>
                                     </td>
 
-                                    <td class="px-4 py-3">
-                                        <flux:button size="sm" icon="eye" href="{{ route('work-orders.show', $order) }}" variant="ghost">Gestionar</flux:button>
+                                    <td class="px-4 py-3 text-right">
+                                        <div class="flex justify-end">
+                                            <flux:button size="sm" icon="eye" href="{{ route('work-orders.show', $order) }}" variant="ghost">Gestionar</flux:button>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty
